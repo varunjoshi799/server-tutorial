@@ -3,7 +3,7 @@ const app = express();
 const cloudinary = require("cloudinary").v2;
 const bodyParser = require('body-parser');
 require('dotenv').config()
-const db = require('services/dbConnect.js');
+const db = require('./server/dbConnect.js');
 
 
 // body parser configuration
@@ -50,7 +50,7 @@ app.post("/persist-image", (req, res) => {
             status: "success",
             data: {
               message: "Image Uploaded Successfully",
-              title: result.title
+              title: result.title,
               cloudinary_id: result.cloudinary_id,
               image_url: result.image_url
             }
