@@ -132,4 +132,41 @@ app.get("/retrieve-image/:cloudinary_id", (request, response) => {
 });
 
 // delete image
+app.delete("/delete-image/:cloudinary_id", (request, response) => {
+    const { cloudinary_id } = request.params;
+
+    // delete from cloudinary
+    cloudinary.uploader
+        .destroy(cloudinary_id)
+        .then(() => {
+            // deleting from postgres
+            db.pool.connect((err, client) => {
+                // delete query
+                const deleteQuery = `DELETE FROM images WHERE cloudinary_id = $1`;
+                const deleteValue = [cloudinary_id];
+
+                // execute delete query
+                client
+                    .query(deleteQuery, deleteValue)
+                    .then((deleteResult) => {
+                        response.status(200).send({
+                            message: "Image Deleted Successfully",
+                            deleteResult,
+                        });
+                    })
+                    .catch((e) => {
+                        response.status(500).send({
+                            message: "Image Couldn't be Deleted",
+                            e,
+                        });
+                    });
+            });
+        })
+        .catch((error) => {
+            response.status(500).send({
+                message: "failure",
+                error,
+            });
+        });
+});
 module.exports = app;
