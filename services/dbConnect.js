@@ -1,12 +1,18 @@
 const pg = require("pg");
 
+// const config = {
+//     host: "rds-postgresql-10mintutorial.cduqfy0z1ly8.us-west-1.rds.amazonaws.com",
+//     user: "varunjoshi",
+//     database: "rds-postgresql-10mintutorial",
+//     password: "oatmeal0",
+//     port: 5432,
+// };
+
 const config = {
-    user: "tutorial",
-    database: "tutorial",
-    password: "tutorial",
-    port: 5433,
-    max: 10, // max number of clients in the pool
-    idleTimeoutMillis: 30000,
+    host: process.env.HOSTNAME,
+    user: process.env.USERNAME,
+    password: process.env.PASSWORD,
+    port: process.env.PORT,
 };
 
 const pool = new pg.Pool(config);
